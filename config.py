@@ -1,0 +1,5 @@
+AUTH_SERVICE_URL = "http://auth-service:4000"
+BOOK_SERVICE_URL = "http://book-service:4001"
+ORDER_SERVICE_URL = "http://order-service:4002"
+SECRET_KEY = "chave_jwt"
+ALGORITHM = "HS256"
