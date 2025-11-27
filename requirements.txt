@@ -3,3 +3,5 @@ uvicorn
 gunicorn
 requests
 python-jose[cryptography]
+pytest
+pytest-cov
