@@ -1,3 +1,4 @@
+
 name: CI/CD Api Gateway - Staging
 
 on:
@@ -23,14 +24,24 @@ jobs:
 
       - name: 4. Rodar Testes e Cobertura (Métrica: 80%)
         run: pytest --cov=./ --cov-report=xml --cov-fail-under=80
-        
 
-      - name: 5. Acionar Deploy no Render (Staging)
+      - name: 5. SonarCloud Scan (Análise de Qualidade)
+        uses: SonarSource/sonarcloud-github-action@v2.4.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          projectKey: 'api-gateway'
+          organization: 'igorceola'
+          args: >
+            -Dsonar.python.coverage.reportPaths=coverage.xml
+            -Dsonar.qualitygate.wait=true
 
+      - name: 6. Acionar Deploy no Render (Staging)
         uses: achorein/render-deploy-action@v1
         with:
           service_id: ${{ secrets.RENDER_API_GATEWAY_STAGING_ID }}
           api_key: ${{ secrets.RENDER_API_KEY }}
           
-      - name: 6. Sucesso no Deploy de Staging
+      - name: 7. Sucesso na Homologação
         run: echo "Deploy para Homologação concluído com sucesso!"
