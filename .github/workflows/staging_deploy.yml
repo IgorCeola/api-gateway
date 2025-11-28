@@ -1,0 +1,36 @@
+name: CI/CD Api Gateway - Staging
+
+on:
+  push:
+    branches:
+      - staging
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 1. Checkout do Código
+        uses: actions/checkout@v4
+
+      - name: 2. Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 3. Instalar Dependências
+        run: pip install -r requirements.txt
+
+      - name: 4. Rodar Testes e Cobertura (Métrica: 80%)
+        run: pytest --cov=./ --cov-report=xml --cov-fail-under=80
+        
+
+      - name: 5. Acionar Deploy no Render (Staging)
+
+        uses: achorein/render-deploy-action@v1
+        with:
+          service_id: ${{ secrets.RENDER_API_GATEWAY_STAGING_ID }}
+          api_key: ${{ secrets.RENDER_API_KEY }}
+          
+      - name: 6. Sucesso no Deploy de Staging
+        run: echo "Deploy para Homologação concluído com sucesso!"
