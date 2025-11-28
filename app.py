@@ -2,6 +2,7 @@ from fastapi import FastAPI, Request, HTTPException
 from jose import jwt, JWTError
 from config import SECRET_KEY, ALGORITHM
 from routes import router
+from prometheus_fastapi_instrumentator import Instrumentator
 
 app = FastAPI(title="API Gateway - Livraria")
 
@@ -24,6 +25,14 @@ async def verify_token(request: Request, call_next):
 
     response = await call_next(request)
     return response
+
+@app.on_event("startup") 
+def startup_event():
+    Instrumentator().instrument(
+        app, 
+        exclude_paths=["/metrics"], 
+    ).expose(app)
+    print("Prometheus Instrumentator configurado.")
 
 app.include_router(router)
 
