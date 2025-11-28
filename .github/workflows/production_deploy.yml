@@ -1,0 +1,46 @@
+name: CD Api Gateway - Production
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 1. Checkout do Código
+        uses: actions/checkout@v4
+      
+      - name: 2. Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          
+      - name: 3. Instalar Dependências
+        run: pip install -r requirements.txt
+
+      - name: 4. Rodar Testes e Cobertura
+        run: pytest --cov=./ --cov-report=xml --cov-fail-under=80
+
+      - name: 5. SonarCloud Scan (Quality Gate)
+        uses: SonarSource/sonarcloud-github-action@v2.4.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          projectKey: 'api-gateway' 
+          organization: 'igorceola'
+          args: >
+            -Dsonar.python.coverage.reportPaths=coverage.xml
+            -Dsonar.qualitygate.wait=true 
+
+      - name: 6. Acionar Deploy no Render (PRODUCTION)
+        uses: achorein/render-deploy-action@v1
+        with:
+          service_id: ${{ secrets.RENDER_API_GATEWAY_PROD_ID }} 
+          api_key: ${{ secrets.RENDER_API_KEY }}
+          
+      - name: 7. Sucesso em Produção
+        run: echo "Deploy para Produção concluído com sucesso!"

@@ -22,7 +22,7 @@ jobs:
       - name: 3. Instalar Dependências
         run: pip install -r requirements.txt
 
-      - name: 4. Rodar Testes e Cobertura (Métrica: 80%)
+      - name: 4. Rodar Testes e Cobertura
         run: pytest --cov=./ --cov-report=xml --cov-fail-under=80
 
       - name: 5. SonarCloud Scan (Análise de Qualidade)
