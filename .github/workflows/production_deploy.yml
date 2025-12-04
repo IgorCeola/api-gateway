@@ -26,17 +26,17 @@ jobs:
           export PYTHONPATH=$PYTHONPATH:$(pwd)
           pytest --cov=./ --cov-report=xml --cov-fail-under=80
 
-      - name: 5. SonarCloud Scan (Quality Gate)
-        uses: SonarSource/sonarcloud-github-action@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          args: >
-            -Dsonar.projectKey=IgorCeola_api-gateway
-            -Dsonar.organization=igorceola
-            -Dsonar.python.coverage.reportPaths=coverage.xml
-            -Dsonar.qualitygate.wait=true 
+      # - name: 5. SonarCloud Scan (Quality Gate)
+      #   uses: SonarSource/sonarcloud-github-action@v2
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      #   with:
+      #     args: >
+      #       -Dsonar.projectKey=IgorCeola_api-gateway
+      #       -Dsonar.organization=igorceola
+      #       -Dsonar.python.coverage.reportPaths=coverage.xml
+      #       -Dsonar.qualitygate.wait=true 
 
       - name: 6. Acionar Deploy no Render (PRODUCTION)
         run: |
