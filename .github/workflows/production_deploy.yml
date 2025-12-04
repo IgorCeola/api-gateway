@@ -22,7 +22,8 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: 4. Rodar Testes e Cobertura
-        run: export PYTHONPATH=$PYTHONPATH:$(pwd) pytest --cov=./ --cov-report=xml --cov-fail-under=80
+        run: export PYTHONPATH=$PYTHONPATH:$(pwd) 
+             pytest --cov=./ --cov-report=xml --cov-fail-under=80
 
       - name: 5. SonarCloud Scan (Quality Gate)
         uses: SonarSource/sonarcloud-github-action@v2
