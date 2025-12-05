@@ -40,7 +40,6 @@ jobs:
 
       - name: 6. Acionar Deploy no Render (PRODUCTION)
         run: |
-          # Usa o comando curl para enviar a requisição POST para o Webhook do Render.
           curl -X POST ${{ secrets.RENDER_DEPLOY_WEBHOOK_PROD }}
           
       - name: 7. Sucesso em Produção

@@ -39,7 +39,6 @@ jobs:
 
       - name: 6. Acionar Deploy no Render (Staging)
         run: |
-          # Usa o comando curl para enviar a requisição POST para o Webhook do Render.
           curl -X POST ${{ secrets.RENDER_DEPLOY_WEBHOOK_STAGING }}
           
       - name: 7. Sucesso na Homologação
